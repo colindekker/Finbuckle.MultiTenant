@@ -22,9 +22,10 @@ namespace Finbuckle.MultiTenant.Strategies
     {
         public async Task<string> GetIdentifierAsync(object context)
         {
-            if(!(context is HttpContext))
-                throw new MultiTenantException(null,
-                    new ArgumentException($"\"{nameof(context)}\" type must be of type HttpContext", nameof(context)));
+            if (!(context is HttpContext))
+            {
+                throw new MultiTenantException(null, new ArgumentException($"\"{nameof(context)}\" type must be of type HttpContext", nameof(context)));
+            }
 
             var path = (context as HttpContext).Request.Path;
 

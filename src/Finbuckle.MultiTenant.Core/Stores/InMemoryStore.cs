@@ -23,52 +23,57 @@ namespace Finbuckle.MultiTenant.Stores
     {
         private readonly ConcurrentDictionary<string, TenantInfo> tenantMap;
 
-        public InMemoryStore() : this (true)
+        public InMemoryStore() : this(true)
         {
         }
 
         public InMemoryStore(bool ignoreCase)
         {
             var stringComparerer = StringComparer.OrdinalIgnoreCase;
-            if(!ignoreCase)
+            if (!ignoreCase)
                 stringComparerer = StringComparer.Ordinal;
-                
+
             tenantMap = new ConcurrentDictionary<string, TenantInfo>(stringComparerer);
         }
 
         public virtual async Task<TenantInfo> TryGetAsync(string id)
         {
             var result = tenantMap.Values.Where(ti => ti.Id == id).SingleOrDefault();
-            
-            return await Task.FromResult(result);
+
+            return await Task.FromResult(result)
+			    .ConfigureAwait(false);
         }
 
         public virtual async Task<TenantInfo> TryGetByIdentifierAsync(string identifier)
         {
             tenantMap.TryGetValue(identifier, out var result);
-            
-            return await Task.FromResult(result);
+
+            return await Task.FromResult(result)
+			    .ConfigureAwait(false);
         }
 
         public async Task<bool> TryAddAsync(TenantInfo tenantInfo)
         {
             var result = tenantMap.TryAdd(tenantInfo.Identifier, tenantInfo);
 
-            return await Task.FromResult(result);
+            return await Task.FromResult(result)
+			    .ConfigureAwait(false);
         }
 
         public async Task<bool> TryRemoveAsync(string identifier)
         {
             var result = tenantMap.TryRemove(identifier, out var dummy);
 
-            return await Task.FromResult(result);
+            return await Task.FromResult(result)
+			    .ConfigureAwait(false);
         }
 
         public async Task<bool> TryUpdateAsync(TenantInfo tenantInfo)
         {
-            var existingTenantInfo = await TryGetAsync(tenantInfo.Id);
+            var existingTenantInfo = await TryGetAsync(tenantInfo.Id)
+			    .ConfigureAwait(false);
 
-            if(existingTenantInfo != null)
+            if (existingTenantInfo != null)
             {
                 existingTenantInfo = tenantInfo;
             }

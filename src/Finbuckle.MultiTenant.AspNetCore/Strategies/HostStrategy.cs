@@ -28,7 +28,7 @@ namespace Finbuckle.MultiTenant.Strategies
             // New in 2.1, match whole domain if just "__tenant__".
             if (template == "__tenant__")
             {
-                template = template.Replace("__tenant__", @"(?<identifier>.+)");
+                template = template.Replace("__tenant__", "(?<identifier>.+)");
             }
             else
             {
@@ -56,7 +56,7 @@ namespace Finbuckle.MultiTenant.Strategies
 
                 template = template.Trim().Replace(".", @"\.");
                 string wildcardSegmentsPattern = @"(\.[^\.]+)*";
-                string singleSegmentPattern = @"[^\.]+";
+                const string singleSegmentPattern = @"[^\.]+";
                 if (template.Substring(template.Length - 3, 3) == @"\.*")
                 {
                     template = template.Substring(0, template.Length - 3) + wildcardSegmentsPattern;
@@ -74,19 +74,18 @@ namespace Finbuckle.MultiTenant.Strategies
         public async Task<string> GetIdentifierAsync(object context)
         {
             if (!(context is HttpContext))
-                throw new MultiTenantException(null,
-                    new ArgumentException($"\"{nameof(context)}\" type must be of type HttpContext", nameof(context)));
+            {
+                throw new MultiTenantException(null, new ArgumentException($"\"{nameof(context)}\" type must be of type HttpContext", nameof(context)));
+            }
 
             var host = (context as HttpContext).Request.Host;
 
-            if (host.HasValue == false)
+            if (!host.HasValue)
                 return null;
 
             string identifier = null;
 
-            var match = Regex.Match(host.Host, regex,
-                RegexOptions.ExplicitCapture,
-                TimeSpan.FromMilliseconds(100));
+            var match = Regex.Match(host.Host, regex, RegexOptions.ExplicitCapture, TimeSpan.FromMilliseconds(100));
 
             if (match.Success)
             {

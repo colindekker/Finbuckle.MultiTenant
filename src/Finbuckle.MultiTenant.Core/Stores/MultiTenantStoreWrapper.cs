@@ -45,7 +45,8 @@ namespace Finbuckle.MultiTenant.Stores
 
             try
             {
-                result = await Store.TryGetAsync(id);
+                result = await store.TryGetAsync(id)
+				    .ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -76,7 +77,8 @@ namespace Finbuckle.MultiTenant.Stores
 
             try
             {
-                result = await Store.TryGetByIdentifierAsync(identifier);
+                result = await Store.TryGetByIdentifierAsync(identifier)
+				    .ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -117,21 +119,26 @@ namespace Finbuckle.MultiTenant.Stores
 
             try
             {
-                var existing = await TryGetAsync(tenantInfo.Id);
+                var existing = await TryGetAsync(tenantInfo.Id)
+				    .ConfigureAwait(false);
+
                 if (existing != null)
                 {
                     Utilities.TryLogInfo(logger, $"{typeof(TStore)}.TryAddAsync: Tenant already exists. Id: \"{tenantInfo.Id}\", Identifier: \"{tenantInfo.Identifier}\"");
                     goto end;
                 }
 
-                existing = await TryGetByIdentifierAsync(tenantInfo.Identifier);
+                existing = await TryGetByIdentifierAsync(tenantInfo.Identifier)
+				    .ConfigureAwait(false);
+
                 if (existing != null)
                 {
                     Utilities.TryLogInfo(logger, $"{typeof(TStore)}.TryAddAsync: Tenant already exists. Id: \"{tenantInfo.Id}\", Identifier: \"{tenantInfo.Identifier}\"");
                     goto end;
                 }
 
-                result = await Store.TryAddAsync(tenantInfo);
+                result = await Store.TryAddAsync(tenantInfo)
+				    .ConfigureAwait(false);
 
             }
             catch (Exception e)
@@ -164,7 +171,8 @@ namespace Finbuckle.MultiTenant.Stores
 
             try
             {
-                result = await Store.TryRemoveAsync(id);
+                result = await Store.TryRemoveAsync(id)
+				    .ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -200,14 +208,17 @@ namespace Finbuckle.MultiTenant.Stores
 
             try
             {
-                var existing = await TryGetAsync(tenantInfo.Id);
+                var existing = await TryGetAsync(tenantInfo.Id)
+				    .ConfigureAwait(false);
+
                 if (existing == null)
                 {
                     Utilities.TryLogInfo(logger, $"{typeof(TStore)}.TryUpdateAsync: Tenant Id: \"{tenantInfo.Id}\" not found.");
                     goto end;
                 }
 
-                result = await Store.TryUpdateAsync(tenantInfo);
+                result = await Store.TryUpdateAsync(tenantInfo)
+				    .ConfigureAwait(false);
 
             }
             catch (Exception e)

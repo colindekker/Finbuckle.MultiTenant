@@ -29,9 +29,10 @@ namespace Finbuckle.MultiTenant.Strategies
     {
         public async virtual Task<string> GetIdentifierAsync(object context)
         {
-            if(!(context is HttpContext))
-                throw new MultiTenantException(null,
-                    new ArgumentException($"\"{nameof(context)}\" type must be of type HttpContext", nameof(context)));
+            if (!(context is HttpContext))
+            {
+                throw new MultiTenantException(null, new ArgumentException($"\"{nameof(context)}\" type must be of type HttpContext", nameof(context)));
+            }
 
             var httpContext = context as HttpContext;
 
@@ -41,10 +42,9 @@ namespace Finbuckle.MultiTenant.Strategies
             foreach (var scheme in await schemes.GetRequestHandlerSchemesAsync())
             {
                 var optionType = scheme.HandlerType.GetProperty("Options").PropertyType;
-                
+
                 // Skip if this is not a compatible type of authentication.
-                if (!typeof(OAuthOptions).IsAssignableFrom(optionType) &&
-                    !typeof(OpenIdConnectOptions).IsAssignableFrom(optionType))
+                if (!typeof(OAuthOptions).IsAssignableFrom(optionType) && !typeof(OpenIdConnectOptions).IsAssignableFrom(optionType))
                 {
                     continue;
                 }
@@ -57,7 +57,7 @@ namespace Finbuckle.MultiTenant.Strategies
                 var optionsMonitorType = typeof(IOptionsMonitor<>).MakeGenericType(optionType);
                 var optionsMonitor = httpContext.RequestServices.GetRequiredService(optionsMonitorType);
                 var options = optionsMonitorType.GetMethod("Get").Invoke(optionsMonitor, new[] { scheme.Name }) as RemoteAuthenticationOptions;
-                
+
                 if (options.CallbackPath == httpContext.Request.Path)
                 {
                     try
@@ -74,7 +74,7 @@ namespace Finbuckle.MultiTenant.Strategies
                         {
                             var formOptions = new FormOptions { BufferBody = true };
                             var form = await httpContext.Request.ReadFormAsync(formOptions);
-                            state = form.Where(i => i.Key.ToLowerInvariant() == "state").Single().Value;
+                            state = form.Single(i => string.Equals(i.Key, "state", StringComparison.InvariantCultureIgnoreCase)).Value;
                         }
 
                         var oAuthOptions = options as OAuthOptions;

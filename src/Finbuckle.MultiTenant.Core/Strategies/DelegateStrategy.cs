@@ -28,8 +28,11 @@ namespace Finbuckle.MultiTenant.Strategies
 
         public async Task<string> GetIdentifierAsync(object context)
         {
-            var identifier = await doStrategy(context);
-            return await Task.FromResult(identifier);
+            var identifier = await doStrategy(context)
+			    .ConfigureAwait(false);
+
+            return await Task.FromResult(identifier)
+			    .ConfigureAwait(false);
         }
     }
 }

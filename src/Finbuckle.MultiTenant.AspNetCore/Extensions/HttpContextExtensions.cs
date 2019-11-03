@@ -30,8 +30,8 @@ namespace Finbuckle.MultiTenant
         {
             object multiTenantContext = null;
             httpContext.Items.TryGetValue(Constants.HttpContextMultiTenantContext, out multiTenantContext);
-            
-            return (MultiTenantContext)multiTenantContext;
+
+            return (MultiTenantContext) multiTenantContext;
         }
 
         /// <summary>
@@ -43,10 +43,10 @@ namespace Finbuckle.MultiTenant
         {
             var multitenantContext = httpContext.GetMultiTenantContext();
 
-            if(multitenantContext == null)
+            if (multitenantContext == null)
                 return false;
 
-            if(resetServiceProvider)
+            if (resetServiceProvider)
                 httpContext.RequestServices = httpContext.RequestServices.CreateScope().ServiceProvider;
 
             multitenantContext.TenantInfo = tenantInfo;
