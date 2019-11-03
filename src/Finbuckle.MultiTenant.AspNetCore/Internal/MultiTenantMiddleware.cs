@@ -49,7 +49,9 @@ namespace Finbuckle.MultiTenant.AspNetCore
                 foreach(var strat in context.RequestServices.GetServices<IMultiTenantStrategy>())
                 {
                      // Try the registered strategy.
-                        identifier = await strat.GetIdentifierAsync(context);
+                        identifier = await strat.GetIdentifierAsync(context)
+                            .ConfigureAwait(false);
+
                         if(identifier != null)
                         {
                             strategy = strat;
@@ -62,7 +64,8 @@ namespace Finbuckle.MultiTenant.AspNetCore
                 if (identifier != null)
                 {
                     SetStrategyInfo(multiTenantContext, strategy);
-                    tenantInfo = await store.TryGetByIdentifierAsync(identifier);
+                    tenantInfo = await store.TryGetByIdentifierAsync(identifier)
+                        .ConfigureAwait(false);
                 }
 
                 // Resolve for remote authentication callbacks if applicable.
@@ -72,11 +75,14 @@ namespace Finbuckle.MultiTenant.AspNetCore
 
                     if (strategy != null)
                     {
-                        identifier = await strategy.GetIdentifierAsync(context);
+                        identifier = await strategy.GetIdentifierAsync(context)
+                            .ConfigureAwait(false);
+
                         if (identifier != null)
                         {
                             SetStrategyInfo(multiTenantContext, strategy);
-                            tenantInfo = await store.TryGetByIdentifierAsync(identifier);
+                            tenantInfo = await store.TryGetByIdentifierAsync(identifier)
+                                .ConfigureAwait(false);
                         }
                     }
                 }
@@ -87,9 +93,12 @@ namespace Finbuckle.MultiTenant.AspNetCore
                     strategy = context.RequestServices.GetService<FallbackStrategy>();
                     if (strategy != null)
                     {
-                        identifier = await strategy.GetIdentifierAsync(context);
+                        identifier = await strategy.GetIdentifierAsync(context)
+                            .ConfigureAwait(false);
+
                         SetStrategyInfo(multiTenantContext, strategy);
-                        tenantInfo = await store.TryGetByIdentifierAsync(identifier);
+                        tenantInfo = await store.TryGetByIdentifierAsync(identifier)
+                            .ConfigureAwait(false);
                     }
                 }
 
@@ -120,7 +129,8 @@ namespace Finbuckle.MultiTenant.AspNetCore
 
             if (next != null)
             {
-                await next(context);
+                await next(context)
+                    .ConfigureAwait(false);
             }
         }
 

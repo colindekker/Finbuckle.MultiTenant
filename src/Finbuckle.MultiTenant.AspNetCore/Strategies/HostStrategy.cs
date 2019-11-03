@@ -92,7 +92,8 @@ namespace Finbuckle.MultiTenant.Strategies
                 identifier = match.Groups["identifier"].Value;
             }
 
-            return await Task.FromResult(identifier);
+            return await Task.FromResult(identifier)
+                .ConfigureAwait(false);
         }
     }
 }

@@ -37,7 +37,8 @@ namespace Finbuckle.MultiTenant.Strategies
 
             string identifier = pathSegments[0];
 
-            return await Task.FromResult(identifier); // Prevent the compliler warning that no await exists.
+            return await Task.FromResult(identifier)
+                .ConfigureAwait(false); // Prevent the compliler warning that no await exists.
         }
     }
 }

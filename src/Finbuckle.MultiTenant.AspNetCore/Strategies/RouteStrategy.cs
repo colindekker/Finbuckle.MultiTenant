@@ -78,7 +78,8 @@ namespace Finbuckle.MultiTenant.Strategies
 
             // Check the route.
             var routeContext = new RouteContext(httpContext);
-            await router.RouteAsync(routeContext);
+            await router.RouteAsync(routeContext)
+                .ConfigureAwait(false);
 
             object identifier = null;
             routeContext.RouteData?.Values.TryGetValue(tenantParam, out identifier);
@@ -122,7 +123,8 @@ namespace Finbuckle.MultiTenant.Strategies
             object identifier = null;
             httpContext.Request.RouteValues.TryGetValue(tenantParam, out identifier);
 
-            return await Task.FromResult(identifier as string);
+            return await Task.FromResult(identifier as string)
+                .ConfigureAwait(false);
         }
     }
 }
