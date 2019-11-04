@@ -8,4 +8,4 @@ See [https://www.finbuckle.com](https://www.finbuckle.com) for more details and 
 
 See [LICENSE](LICENSE) file for license information.
 
-See [CHANGELOG](CHANGELOG.md) for version history details.
+See [CHANGELOG](CHANGELOG.md) for version history  details.
