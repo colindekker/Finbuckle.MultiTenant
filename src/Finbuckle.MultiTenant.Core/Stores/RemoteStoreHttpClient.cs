@@ -4,10 +4,10 @@ namespace Finbuckle.MultiTenant.Stores
     using System.Net.Http;
     using System.Threading.Tasks;
     using IdentityModel.Client;
-    using System.Diagnostics.CodeAnalysis;
     using Newtonsoft.Json;
     using Polly;
     using Polly.Registry;
+    using JetBrains.Annotations;
 
     public class RemoteStoreHttpClient<TTenantInfo>
         where TTenantInfo : class, IRemoteStoreTenantInfo

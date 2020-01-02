@@ -45,7 +45,7 @@ namespace Finbuckle.MultiTenant.Stores
 
             try
             {
-                result = await store.TryGetAsync(id)
+                result = await Store.TryGetAsync(id)
 				    .ConfigureAwait(false);
             }
             catch (Exception e)
